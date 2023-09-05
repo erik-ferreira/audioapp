@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from "react"
+import { MaterialIcons } from "@expo/vector-icons"
+import { Pressable, Text, View } from "react-native"
+
+import { styles } from "./styles"
 
 export default function App() {
+  const [recording, setRecording] = useState(true)
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+      <Pressable
+        onPressIn={() => setRecording(true)}
+        onPressOut={() => setRecording(false)}
+        style={[styles.button, recording && styles.recording]}
+      >
+        <MaterialIcons name="mic" size={44} color="#212121" />
+      </Pressable>
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      {recording && <Text style={styles.label}>Gravando</Text>}
+    </View>
+  )
+}
