@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { MaterialIcons } from "@expo/vector-icons"
-import { Alert, Pressable, Text, View } from "react-native"
+import { Alert, Pressable, Text, View, Button } from "react-native"
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av"
 
 import { styles } from "./styles"
@@ -43,6 +43,18 @@ export default function App() {
     }
   }
 
+  async function handleAudioPlay() {
+    if (recordingFileUri) {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: recordingFileUri },
+        { shouldPlay: true, volume: 1.0 }
+      )
+
+      await sound.setPositionAsync(0)
+      await sound.playAsync()
+    }
+  }
+
   useEffect(() => {
     Audio.requestPermissionsAsync().then(({ granted }) => {
       Audio.setAudioModeAsync({
@@ -67,6 +79,10 @@ export default function App() {
       </Pressable>
 
       {recording && <Text style={styles.label}>Gravando</Text>}
+
+      {recordingFileUri && (
+        <Button title="Ouvir áudio" onPress={handleAudioPlay} />
+      )}
     </View>
   )
 }
